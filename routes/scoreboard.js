@@ -5,16 +5,13 @@ const Scoreboard = require('../models/Scoreboard');
 
 const authenticate = async (req, res, next) => {
   const authHeader = req.headers.authorization || '';
-  console.log('🔐 Authorization header:', authHeader);
   const token = authHeader.replace('Bearer ', '');
 
   try {
     const decoded = await admin.auth().verifyIdToken(token);
-    console.log('✅ Decoded token:', decoded);
     req.uid = decoded.uid;
     next();
   } catch (err) {
-    console.error('❌ Token verification error:', err.code, err.message);
     return res.status(401).json({
       error: 'No autorizado',
       details: err.message
